@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html ng-app='angular'>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>BookSwitch</title>
+        
+        <link href="style.css" rel="stylesheet" type="text/css" />
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    </head>
+    <body>
+      <script src="https://code.angularjs.org/1.3.0-rc.1/angular.min.js"></script>
+        
+        <script src="angular.js"></script>
+        <!--<script src="jquery-3.1.1.min.js"></script>-->
+      <div id="header"><div id='headerTitle' float='center'><h1>BookSwitch</h1><span align='right'><form>
+            Search words:<input type="search" id="search" name="search" file-model = "myFile" value="e.g. Alice..." multiple accept= ".json">
+            <input id="button" type="button" name="create-index" value="Go">
+          </form></span>
+      </div>
+      </div>
+
+      
+
+      <div id="help" ng-controller="index">{{message}}</div>
+      <div id="content">
+        <div id="user-input">
+            Select files:<input type="file" id="fUpload" name="fUpload" multiple><br><br>
+            <input type="button" id="upload" name="upload" value="Upload" onclick= "readFile()"><br><br>
+            <input id="button" type="button" name="create-index" value="Create Index"><br>
+  
+        </div>
+        <div id="user-output">
+          <table>
+              <tr>
+                <th>
+                  Words
+                </th>   
+              </tr>
+              <tr>
+                <td>
+                example 1
+                </td>
+              </tr>
+        
+          </table>
+        </div>
+      </div>
+      <div id="footer">Copyright &copy; FAM.com</div>
+      <script src="inverted.js"></script>
+    </body>
+</html>

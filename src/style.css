@@ -1,0 +1,58 @@
+#header{
+  padding: 1em;
+  color: white;
+  background-color: SteelBlue;
+  clear: left;
+  text-align: center;
+}
+#help {
+	float: left;
+	width: 10em;
+  border: 1px solid gray;
+  padding: 1em;
+  overflow: hidden;
+  margin: 10px;
+}
+
+#content {
+	float: left;
+	width: 50em;
+	background-color: Gainsboro;
+	margin: 10px;
+}
+#user-input, #user-output{
+  float: left;
+	width: 10em;
+	margin: 10px;
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid hotpink;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+#button{
+ background-color: SteelBlue;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+#footer{
+    clear:both;
+    padding: 1em;
+    color: white;
+    background-color: DimGrey;
+    text-align: center;
+}
