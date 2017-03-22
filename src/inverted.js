@@ -1,10 +1,8 @@
 class InvertedIndex{
     
     constructor(){
-        this.indices={};
-        this.answer={};
-        this.fileContent={};
-        this.splitedWords={}
+        this.searchIndices={};
+        this.indexedFiles={};
     }
 
     readFile(aFiles){
@@ -13,11 +11,7 @@ class InvertedIndex{
             // console.log(file, "file one");
             readEachfile(file);
         });
-
-  }
-
-
-    
+    }
 
     validateFile(jsonContent){
         jsonContent.forEach((doc)=>{
@@ -30,109 +24,156 @@ class InvertedIndex{
         })
     }
      
-     tokenizeWords(book1){
-
-        //if a document exists? combine title and text to split at once
+      static unique(array) {
+      if (Array.isArray(array)) {
+        const checked = {};
+        return array.filter((item) => {
+          if (!checked[item]) {
+            checked[item] = true;
+            return item;
+          }
+          return null;
+        });
+      }
+      return ['invalid data type supplied'];
     }
-        createIndex(fileContent){
-            let book1 = JSON.parse(fileContent);
-            //tokenize words
-          let titlePlusText = {};
+  
+    static tokenizeWords(text){
+      for (let doc in text)
+      {
+      const invalid = /[.,\/#!$%\^&\*;:{}=\-_`~()]/g;
+      text[doc] =text[doc].replace(invalid, "");
+      }
+      return text;
+    }
+    
+    static splitSort(docObject){
+      const docKeys = Object.keys(docObject);
+      docKeys.forEach((key) => {
+        const words = docObject[key].toLowerCase().split(' ').sort();
+        docObject[key] = InvertedIndex.unique(words);
+      });
+      console.log(docObject);
+      return docObject;
+
+    }
+    
+    static concatenateText(){
+      
+      //if a document exists? combine title and text to split at once
+        let concatenatedText = {};
         book1.forEach((bookContent, bookIndex) => {
           if(book1.hasOwnProperty(bookIndex)){
-            titlePlusText[bookIndex] = bookContent.title +' '+ bookContent.text;
-            // titlePlusText[bookIndex] = `${bookContent.title}${bookContent.text}`;
-            //Remove punctuations and unwanted characters
-            titlePlusText[bookIndex]=titlePlusText[bookIndex].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
-          }  
+            concatenatedText[bookIndex] = bookContent.title +' '+ bookContent.text;
+          }
         });
-        console.log(titlePlusText);
-  
-        //split words in each document
-        let splitedWords={}
-        for (let doc in titlePlusText){
-          splitedWords[doc]= titlePlusText[doc].toLowerCase().split(' ').sort(); //make words lower case, split them and sort them
-          //filter to get unique words...word for each word/item, index for word's index and a for each array.
-          splitedWords[doc]= splitedWords[doc].filter((word, index, splitedWords) => splitedWords.indexOf(word) == index); 
-        }
-    
-
-       //index words 
-        let answer= {};
-        Object.keys(splitedWords).forEach((keys) => { 
-            splitedWords[keys].forEach((words) => {
-                if (!answer.hasOwnProperty(words)) {
-                answer[words] = [keys];
+        return concatenatedText;
+    }
+      
+        
+    createIndex(fileContent){
+        //let tokenizedText={};
+        let fileObject = JSON.parse(fileContent);
+        //combine Title and Text
+        let joinedkeys = InvertedIndex.concatenateText(fileObject);
+        let tokenizedWords = InvertedIndex.tokenizeWords(joinedkeys);
+        let splittedWords= InvertedIndex.splitSort(tokenizedWords);
+      //index words 
+      console.log(splittedWords);
+        Object.keys(splittedWords).forEach((keys) => { 
+            splittedWords[keys].forEach((words) => {
+                if (!this.indexedFiles.hasOwnProperty(words)) {
+                this.indexedFiles[words] = [keys];
                 } 
                 else 
-                answer[words].push(keys);
+                this.indexedFiles[words].push(keys);
         });
-       });
+      });
        
-       return answer;
+      return this.indexedFiles;
        }
     
-    getIndex(fileName){
-       
+    getIndex(searchWords){
+       return 'Found Index';
     }
+
     searchIndex(searchWords, fileName){
-      //let = this; 
-    //    if (this.tokenizeWords(searchWords));
-    //    check to see if words exist in 
-    //    if a word/ words exist then display 
-    //    let searchResult=this.getIndex(searchWords);
-
+    
+    const searchResult = {};
+    if(typeof searchWords !== 'string') {
+      return false;
     }
-
-}
-
-
-const sample = new InvertedIndex();
-let allFiles = [];
-const fileInput = document.getElementById('fUpload');
-
-fileInput.addEventListener('change', ()=> { 
-    //get files and validate extension
-    allFiles = [];
-    Object.keys(fileInput.files).forEach((file) => {
-        const eachFile = fileInput.files[file];
-        if (validateExt(eachFile.name)) {  //validate eachfile extention and push good files into allFiles 
-            allFiles.push(eachFile);
-        } else {
-            console.log('not valid')
-        }
+    searchWords = this.tokenize(searchWords);
+    console.log(searchWords);
+    const index = this.indices[fileName];
+    if(!index){
+      return false;
+    }
+    console.log(index);
+    searchWords.forEach((word) => {
+      if(index[word]){
+        searchResult[word] = index[word];
+      }
     });
+    
+    this.searchIndices[fileName] = searchResult;
+    return this.searchIndices[fileName];
+  }
+
+}
+
+
+// let allFiles = [];
+// const invertedIndex = new InvertedIndex();
+// const fileInput = document.getElementById('fUpload');
+// fileInput.addEventListener('change', () => { 
+//     //get files and validate extension
+//     allFiles = [];
+//     console.log(fileInput.files);
+//     Object.keys(fileInput.files).forEach((file) => {
+//         const eachFile = fileInput.files[file];
+//         if (validateExt(eachFile.name)) {  //validate eachfile extention and push good files into allFiles 
+//             allFiles.push(eachFile);
+//         } else {
+//             console.log(eachFile.name+' is not valid');
+//         }
+//     });
        
-});
+// });
 
-const readFile = () => {
-    sample.readFile(allFiles);
-}
 
-const readEachfile = (file) => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-        try {
-           let result =event.target.result;
-            console.log(sample.createIndex(result));
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    reader.readAsText(file);
-}
 
-let badExt = [];
-let goodExt = [];
+//     const readEachfile = (file) => {
+//     const reader = new FileReader();
+//     reader.onload = (event) => {
+//         try {
+//            let result =event.target.result;
+//             console.log(invertedIndex.tokenizeWords(result));
+//             console.log(invertedIndex.createIndex(result));
+//         } catch (err) {
+//             console.log(err);
+//         }
+//     };
+//     reader.readAsText(file);
+// }
 
-const validateExt = (name) => {
-    if (!name.toLowerCase().match(/\.json$/)){
-        badExt.push(name);
-        console.log(badExt);
-        return false;
-    } else {
-        goodExt.push(name);
-        console.log(goodExt);
-        return true;
-    };
-}
+// const readFile = () => {
+//     invertedIndex.readFile(allFiles);
+// }
+
+
+
+// let badExt = [];
+// let goodExt = [];
+
+// const validateExt = (name) => {
+//     if (!name.toLowerCase().match(/\.json$/)){
+//         badExt.push(name);
+//         console.log(badExt);
+//         return false;
+//     } else {
+//         goodExt.push(name);
+//         console.log(goodExt);
+//         return true;
+//     };
+// }

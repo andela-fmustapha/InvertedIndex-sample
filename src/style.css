@@ -8,39 +8,74 @@
 #help {
 	float: left;
 	width: 10em;
-  border: 1px solid gray;
-  padding: 1em;
-  overflow: hidden;
-  margin: 10px;
+    border-radius: 25px;
+    border: 1px solid gray;
+    padding: 1em;
+    overflow: hidden;
+    margin: 10px;
+    background-color: SteelBlue;
+    font-family: "HelveticaNeue-Light"; 
+    
 }
-
+/*style div tags*/ 
 #content {
 	float: left;
 	width: 50em;
 	background-color: Gainsboro;
 	margin: 10px;
+    border-radius: 25px;
 }
-#user-input, #user-output{
+#user-input, #user-output, #selectBooks{
   float: left;
 	width: 10em;
 	margin: 10px;
 }
+
+#selectBooks{
+  float: right;
+  width: 10em; 
+  margin: 10px;
+}
+
+#result {
+	float:left;
+	width: 50em;
+	background-color: Gainsboro;
+	margin: 10px;
+    border-radius: 25px;
+}
+
+
+/*Style select input*/
+select {
+    font-family: 'Times New Roman';
+}
+
+select option {
+    background-color: #FFFF00;
+    color: #FF0000;
+}
+
+/*Style table*/
 table {
-    font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
 }
 
-td, th {
-    border: 1px solid hotpink;
+th, td {
     text-align: left;
     padding: 8px;
 }
 
-tr:nth-child(even) {
-    background-color: #dddddd;
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+    background-color: SteelBlue;
+    color: white;
 }
-#button{
+
+/*Style buttons */
+#create-index{
  background-color: SteelBlue;
     border: none;
     color: white;
@@ -49,6 +84,10 @@ tr:nth-child(even) {
     margin: 4px 2px;
     cursor: pointer;
 }
+
+
+
+/*Style footer*/
 #footer{
     clear:both;
     padding: 1em;
