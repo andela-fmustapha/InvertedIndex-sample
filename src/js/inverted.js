@@ -15,8 +15,11 @@ class InvertedIndex {
   validateFile( jsonContent ) {
     jsonContent.forEach( ( doc ) => {
       if ( doc.hasOwnProperty( 'title' ) && doc.hasOwnProperty( 'text' ) ) {
-        console.log( doc.title );
-      } else { console.log( true ); }
+        // console.log(doc.title + 'is invalid');
+        return true;
+      }
+      // console.log('validated');
+      return false;
     } );
   }
 
@@ -35,44 +38,32 @@ class InvertedIndex {
   }
 
   static tokenizeWords( text ) {
-    for ( const doc in text ) {
-      const invalid = /[.,\/#!$%\^&\*;:{}=\-_`~()]/g;
-      text[ doc ] = text[ doc ].replace( invalid, '' );
-    }
+    const invalid = /[.,\/#!$%\^&\*;:{}=\-_`~()]/g;
+    text = text.replace( invalid, '' );
     return text;
   }
 
   static splitSort( docObject ) {
-    const docKeys = Object.keys( docObject );
-    docKeys.forEach( ( key ) => {
-      const words = docObject[ key ].toLowerCase().split( ' ' ).sort();
-      docObject[ key ] = InvertedIndex.unique( words );
-    } );
-    console.log( docObject );
+    const words = docObject.toLowerCase().split( ' ' ).sort();
+    docObject = InvertedIndex.unique( words );
     return docObject;
   }
 
-  static concatenateText() {
+  static concatenateText( jContent ) {
     // if a document exists? combine title and text to split at once
-    const concatenatedText = {};
-    book1.forEach( ( bookContent, bookIndex ) => {
-      if ( book1.hasOwnProperty( bookIndex ) ) {
-        concatenatedText[ bookIndex ] = `${bookContent.title  } ${  bookContent.text}`;
-      }
-    } );
+    let concatenatedText = {};
+    concatenatedText = `${jContent.title} ${jContent.text}`;
     return concatenatedText;
   }
 
-
-  createIndex( fileContent ) {
-    // let tokenizedText={};
-    const fileObject = JSON.parse( fileContent );
-    // combine Title and Text
-    const joinedkeys = InvertedIndex.concatenateText( fileObject );
-    const tokenizedWords = InvertedIndex.tokenizeWords( joinedkeys );
-    const splittedWords = InvertedIndex.splitSort( tokenizedWords );
+  createIndex( book ) {
+    const splittedWords = {};
+    book.forEach( ( doc, key ) => {
+      const joinedkeys = InvertedIndex.concatenateText( doc );
+      const tokenizedWords = InvertedIndex.tokenizeWords( joinedkeys );
+      splittedWords[ key ] = InvertedIndex.splitSort( tokenizedWords );
+    } );
     // index words
-    console.log( splittedWords );
     Object.keys( splittedWords ).forEach( ( keys ) => {
       splittedWords[ keys ].forEach( ( words ) => {
         if ( !this.indexedFiles.hasOwnProperty( words ) ) {
@@ -80,7 +71,6 @@ class InvertedIndex {
         } else { this.indexedFiles[ words ].push( keys ); }
       } );
     } );
-
     return this.indexedFiles;
   }
 

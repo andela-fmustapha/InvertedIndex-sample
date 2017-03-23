@@ -32,24 +32,22 @@ angular.module( 'angular', [] )
     };
 
     $scope.readAllFiles = () => {
-      console.log( $scope.allFiles )
-        // ReadFile using file reader
-      const readEachfile = ( file ) => {
+      // console.log($scope.allFiles);
+      // ReadFile using file reader
+      $scope.allFiles.forEach( ( eachFile ) => {
         const reader = new FileReader();
-        reader.onload = ( event ) => {
+        reader.onload = ( () => ( event ) => {
           try {
-            const result = event.target.result;
-            if ( invertedIndex.validateFile( result ) ) {
-              console.log( invertedIndex.createIndex( file ) );
-            } else {
-              console.log( `${file.name  }is not in the right JSON structure` );
-            }
+            const result = JSON.parse( event.target.result );
+            invertedIndex.validateFile( result );
+            console.log( invertedIndex.createIndex( result ) );
+            //console.log( 'cool' )
           } catch ( err ) {
             console.log( err );
           }
-        };
-        reader.readAsText( file );
-      };
+        } )( eachFile );
+        reader.readAsText( eachFile );
+      } );
     };
 
 
