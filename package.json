@@ -23,6 +23,10 @@
   "homepage": "https://github.com/andela-fmustapha/Inverted-index#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
+    "gulp-eslint": "^3.0.1",
+    "gulp-util": "latest",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-connect": "latest",
     "jasmine": "^2.5.3",
     "jasmine-core": "^2.5.2",
     "karma-jasmine": "^0.1.0"
